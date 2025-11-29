@@ -2,6 +2,7 @@ package com.example.bytedanceexperienceview.ui.experience.adapter
 
 import ExperienceItem
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,11 +31,14 @@ class ExperienceCardAdapter(
         private val likeButton: ImageView = view.findViewById(R.id.like_button)
         private val likesCountView: TextView = view.findViewById(R.id.tv_likes_count)
 
+        private val TAG = "Adapter调试"
+
         init {
             // 设置点赞点击监听器
             likeButton.setOnClickListener {
                 if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
                     val item = getItem(bindingAdapterPosition)
+                    Log.d(TAG, "点击: 位置: $bindingAdapterPosition, ID: ${item.id}")
                     onLikeClick(item)
                 }
             }
@@ -57,23 +61,27 @@ class ExperienceCardAdapter(
             userNameView.text = item.userName
             likesCountView.text = item.likesCount.toString()
 
-            // 更新点赞图标状态和颜色
+            // 【UI 实时反馈】: 更新点赞图标状态和颜色
             val likeColor = if (item.isLiked) Color.RED else Color.DKGRAY
             likeButton.setColorFilter(likeColor)
+
+            // 确保图标的资源是存在的（ic_experience_like）
+            likeButton.setImageResource(R.drawable.ic_experience_like)
         }
     }
 
-    // 2. DiffUtil
+    // 2. DiffUtil (用于高效地计算列表差异)
     class ExperienceItemDiffCallback : DiffUtil.ItemCallback<ExperienceItem>() {
         override fun areItemsTheSame(oldItem: ExperienceItem, newItem: ExperienceItem): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: ExperienceItem, newItem: ExperienceItem): Boolean {
-            // 仅比较可能变化的内容
+            // 关键：必须比较 isLiked 和 likesCount 来确保 UI 变化能被检测到
             return oldItem.likesCount == newItem.likesCount &&
                     oldItem.isLiked == newItem.isLiked &&
-                    oldItem.title == newItem.title
+                    oldItem.title == newItem.title &&
+                    oldItem.imageUrl == newItem.imageUrl
         }
     }
 

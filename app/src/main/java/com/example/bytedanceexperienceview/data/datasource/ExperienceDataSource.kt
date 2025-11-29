@@ -22,7 +22,7 @@ class ExperienceDataSource {
     suspend fun getMockData(page: Int, pageSize: Int): List<ExperienceItem> {
         delay(1000L)
         return List(pageSize) { index ->
-            val ID = "${page}_index"
+            val ID = "page${page}_item${index}"
 
             ExperienceItem(
                 id = ID,

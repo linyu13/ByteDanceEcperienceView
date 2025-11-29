@@ -1,6 +1,7 @@
 package com.example.bytedanceexperienceview.ui.experience.controller
 
 import ExperienceItem
+import android.util.Log
 import com.example.bytedanceexperienceview.data.datasource.ExperienceDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,22 +49,22 @@ class ExperienceController {
         }
     }
 
-    fun toggleLikeStatus(
-        item: ExperienceItem, onUpdate: (List<ExperienceItem>) -> Unit
-    ) {
+    private val TAG = "Controller调试"
+    fun toggleLikeStatus(item: ExperienceItem, onUpdate: (List<ExperienceItem>, Int) -> Unit) {
         val index = dataList.indexOfFirst { it.id == item.id }
+        Log.d(TAG, "状态切换: 接收ID: ${item.id}, 在 dataList 中找到的索引: $index")
         if (index != -1) {
             val currentItem = dataList[index]
 
             if (currentItem.isLiked) {
                 currentItem.isLiked = false
-                currentItem.likesCount--
+                currentItem.likesCount = (currentItem.likesCount - 1).coerceAtLeast(0)
             } else {
                 currentItem.isLiked = true
                 currentItem.likesCount++
             }
 
-            onUpdate(dataList.toList())
+            onUpdate(dataList.toList(), index)
         }
     }
 }

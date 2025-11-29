@@ -1,6 +1,7 @@
 package com.example.bytedanceexperienceview
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -37,12 +38,20 @@ class MainActivity : AppCompatActivity() {
         layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
         recyclerView.layoutManager = layoutManager
 
+
+        val TAG = "Activity调试"
         // 2. 初始化 Adapter
         adapter = ExperienceCardAdapter(
             onLikeClick = { item ->
-                controller.toggleLikeStatus(item) { updatedList ->
-                    // 接收 Controller 更新后的完整列表并提交给 Adapter
-                    adapter.submitList(updatedList)
+                // 传入 item
+                controller.toggleLikeStatus(item) { updatedList, position ->
+                    // 提交新的列表 (DiffUtil会进行比较)
+                    Log.d(TAG, "回调接收: 收到位置 $position 的更新请求。正在提交列表...")
+                    adapter.submitList(updatedList) {
+                        // 回调完成后，强制刷新该 item (虽然 submitList 应该处理，但这是保险措施)
+                        Log.d(TAG, "回调完成: submitList 已完成。强制通知位置 $position 变化。")
+                        adapter.notifyItemChanged(position)
+                    }
                 }
             }
         )
