@@ -1,10 +1,11 @@
-package com.example.bytedanceexperienceview.data.model
+// /java/com/example/bytedanceexperienceview/data/model/ExperienceItem.kt
 
 data class ExperienceItem(
-    val imageUrl: String,
-    val title: String,
-    val userName: String,
-    val userAvatarUrl: String,
-    var likesCount: Int,
-    var isLiked: Boolean
+    val id: String, // 唯一 ID
+    val imageUrl: String, // 图片URL
+    val title: String, // 标题
+    val userName: String, // 用户名
+    val userAvatarUrl: String, // 用户头像URL
+    var likesCount: Int, // 点赞数量
+    var isLiked: Boolean // 是否点赞
 )
