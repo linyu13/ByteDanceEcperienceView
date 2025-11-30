@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recycler_view)
         fabToggleLayout = findViewById(R.id.fab_toggle_layout)
 
-        // 初始化瀑布流额
+        // 初始化瀑布流
         layoutManager = StaggeredGridLayoutManager(
             currentSpanCount,
             StaggeredGridLayoutManager.VERTICAL
