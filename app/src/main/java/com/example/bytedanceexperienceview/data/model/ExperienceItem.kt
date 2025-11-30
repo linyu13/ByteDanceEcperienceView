@@ -1,4 +1,4 @@
-// /java/com/example/bytedanceexperienceview/data/model/ExperienceItem.kt
+package com.example.bytedanceexperienceview.data.model
 
 data class ExperienceItem(
     val id: String, // 唯一 ID

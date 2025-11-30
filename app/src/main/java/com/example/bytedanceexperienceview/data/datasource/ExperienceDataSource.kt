@@ -1,20 +1,21 @@
 package com.example.bytedanceexperienceview.data.datasource
 
-import ExperienceItem
+import com.example.bytedanceexperienceview.data.model.ExperienceItem
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
 class ExperienceDataSource {
 
+    // 占位图片
     private val mockImageURL = listOf(
-        "https://picsum.photos/id/10/300/350",  // 3:3.5
-        "https://picsum.photos/id/12/300/550",  // 3:5.5
-        "https://picsum.photos/id/15/300/400",  // 3:4
-        "https://picsum.photos/id/20/300/500",  // 3:5
-        "https://picsum.photos/id/24/300/450",  // 3:4.5
-        "https://picsum.photos/id/27/300/600",  // 3:6
-        "https://picsum.photos/id/30/300/380",  // 3:3.8
-        "https://picsum.photos/id/33/300/420"   // 3:4.2
+        "https://picsum.photos/id/10/300/350",
+        "https://picsum.photos/id/12/300/550",
+        "https://picsum.photos/id/15/300/400",
+        "https://picsum.photos/id/20/300/500",
+        "https://picsum.photos/id/24/300/450",
+        "https://picsum.photos/id/27/300/600",
+        "https://picsum.photos/id/30/300/380",
+        "https://picsum.photos/id/33/300/420"
     )
 
     private val mockAvatarURL = "https://picsum.photos/id/64/100/100"

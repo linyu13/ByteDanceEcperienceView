@@ -1,8 +1,8 @@
 package com.example.bytedanceexperienceview.ui.experience.controller
 
-import ExperienceItem
 import android.util.Log
 import com.example.bytedanceexperienceview.data.datasource.ExperienceDataSource
+import com.example.bytedanceexperienceview.data.model.ExperienceItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -10,11 +10,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 // 业务逻辑与数据管理
+// 负责数据刷新，加载等内容
 class ExperienceController {
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val dataSource = ExperienceDataSource()
 
-    // 数据分页
+    // 分页区分状态
     private var currentPage = 1
     private val pageSize = 15
 
@@ -22,12 +23,14 @@ class ExperienceController {
     private val dataList = mutableListOf<ExperienceItem>()
 
 
-    // 初始化
+    // 下拉刷新
     fun refreshData(onResult: (List<ExperienceItem>) -> Unit) {
         scope.launch {
             currentPage = 1
+            // 重新在IO线程获取资源
             val newData = dataSource.getMockData(currentPage, pageSize)
 
+            // 切换回主线程重新渲染UI
             withContext(Dispatchers.Main) {
                 dataList.clear()
                 dataList.addAll(newData)
@@ -40,8 +43,10 @@ class ExperienceController {
     fun loadMoreData(onResult: (List<ExperienceItem>) -> Unit) {
         scope.launch {
             currentPage++
+            // 同上
             val newData = dataSource.getMockData(currentPage, pageSize)
 
+            // 同上
             withContext(Dispatchers.Main) {
                 dataList.addAll(newData)
                 onResult(dataList.toList())
@@ -49,6 +54,7 @@ class ExperienceController {
         }
     }
 
+    // 切换点赞状态
     private val TAG = "Controller调试"
     fun toggleLikeStatus(item: ExperienceItem, onUpdate: (List<ExperienceItem>, Int) -> Unit) {
         val index = dataList.indexOfFirst { it.id == item.id }
@@ -64,6 +70,7 @@ class ExperienceController {
                 currentItem.likesCount++
             }
 
+            // 返回列表以及修改的index，用于局部更新
             onUpdate(dataList.toList(), index)
         }
     }
